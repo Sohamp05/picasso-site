@@ -11,7 +11,9 @@ export async function getSiteSettings() {
       contactEmail,
       contactPhone,
       address
-    }`
+    }`,
+    {},
+    { next: { revalidate: 60 } }
   );
 }
 
@@ -24,7 +26,9 @@ export async function getFeaturedProducts() {
       images,
       category,
       description
-    }`
+    }`,
+    {},
+    { next: { revalidate: 60 } }
   );
 }
 
@@ -37,13 +41,17 @@ export async function getAllProducts() {
       images,
       category,
       description
-    }`
+    }`,
+    {},
+    { next: { revalidate: 60 } }
   );
 }
 
 export async function getProductCategories() {
   return client.fetch(
-    `array::unique(*[_type == "product"].category)`
+    `array::unique(*[_type == "product"].category)`,
+    {},
+    { next: { revalidate: 60 } }
   );
 }
 
@@ -57,7 +65,8 @@ export async function getProductBySlug(slug: string) {
       category,
       description
     }`,
-    { slug }
+    { slug },
+    { next: { revalidate: 60 } }
   );
 }
 
@@ -72,6 +81,7 @@ export async function getRelatedProducts(category: string, currentProductId: str
       category,
       description
     }`,
-    { category, currentProductId }
+    { category, currentProductId },
+    { next: { revalidate: 60 } }
   );
 }
