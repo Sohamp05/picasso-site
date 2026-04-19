@@ -42,7 +42,10 @@ export default async function RootLayout({
         </main>
         <Footer />
         <FloatingWhatsAppButton 
-          phoneNumber={settings?.whatsappNumber || "+919731315677"}
+          contacts={[
+            { name: "Vinay Jain", phoneNumber: "+919731315677" },
+            { name: "Abhishek", phoneNumber: "+919071161269" },
+          ]}
           message={settings?.whatsappMessage}
         />
       </body>

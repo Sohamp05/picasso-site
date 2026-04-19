@@ -7,7 +7,11 @@ export const metadata: Metadata = {
   description: "Browse our complete catalog of premium corporate branding solutions.",
 };
 
-export default async function ProductsPage() {
+export default async function ProductsPage(props: {
+  searchParams: Promise<{ category?: string }>;
+}) {
+  const searchParams = await props.searchParams;
+
   const [products, categories] = await Promise.all([
     getAllProducts(),
     getProductCategories(),
@@ -15,6 +19,16 @@ export default async function ProductsPage() {
 
   // Filter out null/undefined categories just in case
   const validCategories = (categories || []).filter(Boolean);
+  const initialCategory =
+    searchParams.category && validCategories.includes(searchParams.category)
+      ? searchParams.category
+      : "All";
 
-  return <ProductsClient initialProducts={products} categories={validCategories} />;
+  return (
+    <ProductsClient
+      initialProducts={products}
+      categories={validCategories}
+      initialCategory={initialCategory}
+    />
+  );
 }

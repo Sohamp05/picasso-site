@@ -7,10 +7,15 @@ interface ProductsClientProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   initialProducts: any[];
   categories: string[];
+  initialCategory?: string;
 }
 
-export default function ProductsClient({ initialProducts, categories }: ProductsClientProps) {
-  const [activeCategory, setActiveCategory] = useState<string>("All");
+export default function ProductsClient({
+  initialProducts,
+  categories,
+  initialCategory = "All",
+}: ProductsClientProps) {
+  const [activeCategory, setActiveCategory] = useState<string>(initialCategory);
 
   const filteredProducts = activeCategory === "All" 
     ? initialProducts 

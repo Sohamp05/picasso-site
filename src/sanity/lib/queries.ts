@@ -1,7 +1,19 @@
-import { client } from "./client";
+import { client, hasSanityConfig } from "./client";
+
+async function safeFetch<T>(query: string, params: Record<string, unknown> = {}, fallback: T): Promise<T> {
+  if (!hasSanityConfig || !client) {
+    return fallback;
+  }
+
+  try {
+    return await client.fetch(query, params, { next: { revalidate: 60 } });
+  } catch {
+    return fallback;
+  }
+}
 
 export async function getSiteSettings() {
-  return client.fetch(
+  return safeFetch(
     `*[_type == "siteSettings"][0]{
       heroTagline,
       heroSubtext,
@@ -13,12 +25,12 @@ export async function getSiteSettings() {
       address
     }`,
     {},
-    { next: { revalidate: 60 } }
+    null
   );
 }
 
 export async function getFeaturedProducts() {
-  return client.fetch(
+  return safeFetch(
     `*[_type == "product" && featured == true]{
       _id,
       title,
@@ -28,12 +40,12 @@ export async function getFeaturedProducts() {
       description
     }`,
     {},
-    { next: { revalidate: 60 } }
+    []
   );
 }
 
 export async function getAllProducts() {
-  return client.fetch(
+  return safeFetch(
     `*[_type == "product"] | order(_createdAt desc){
       _id,
       title,
@@ -43,20 +55,20 @@ export async function getAllProducts() {
       description
     }`,
     {},
-    { next: { revalidate: 60 } }
+    []
   );
 }
 
 export async function getProductCategories() {
-  return client.fetch(
+  return safeFetch(
     `array::unique(*[_type == "product"].category)`,
     {},
-    { next: { revalidate: 60 } }
+    []
   );
 }
 
 export async function getProductBySlug(slug: string) {
-  return client.fetch(
+  return safeFetch(
     `*[_type == "product" && slug.current == $slug][0]{
       _id,
       title,
@@ -66,13 +78,13 @@ export async function getProductBySlug(slug: string) {
       description
     }`,
     { slug },
-    { next: { revalidate: 60 } }
+    null
   );
 }
 
 export async function getRelatedProducts(category: string, currentProductId: string) {
   // Fetch up to 4 products in the same category, excluding the current product
-  return client.fetch(
+  return safeFetch(
     `*[_type == "product" && category == $category && _id != $currentProductId][0...4]{
       _id,
       title,
@@ -82,6 +94,6 @@ export async function getRelatedProducts(category: string, currentProductId: str
       description
     }`,
     { category, currentProductId },
-    { next: { revalidate: 60 } }
+    []
   );
 }

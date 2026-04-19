@@ -1,14 +1,40 @@
-import { getSiteSettings, getFeaturedProducts } from "@/sanity/lib/queries";
+import { getSiteSettings, getAllProducts, getProductCategories } from "@/sanity/lib/queries";
 import HeroSection from "@/components/HeroSection";
-import ProductCard from "@/components/ProductCard";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import Image from "next/image";
+import { urlFor } from "@/sanity/lib/image";
+
+interface HomeProduct {
+  _id: string;
+  title: string;
+  category: string;
+  slug?: { current: string };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  images?: any[];
+}
 
 export default async function Home() {
-  const [settings, featuredProducts] = await Promise.all([
+  const [rawSettings, allProducts, categories] = await Promise.all([
     getSiteSettings(),
-    getFeaturedProducts(),
+    getAllProducts(),
+    getProductCategories(),
   ]);
+  const settings = rawSettings as
+    | { heroTagline?: string; heroSubtext?: string; heroVideoUrl?: string }
+    | null;
+
+  const categoryProductMap = (categories || []).map((category: string) => ({
+    category,
+    products: (allProducts || []).filter(
+      (product: HomeProduct) => product.category === category
+    ),
+  }));
+
+  const formatCategory = (cat: string) =>
+    cat
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
 
   return (
     <div>
@@ -18,40 +44,63 @@ export default async function Home() {
         videoUrl={settings?.heroVideoUrl}
       />
 
-      {/* Featured Products Section */}
+      {/* Categories and Options Section */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
           <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
             <div className="max-w-2xl">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 font-heading mb-4">
-                Featured Collections
+                Browse by Category
               </h2>
               <p className="text-gray-600 text-lg">
-                Discover our hand-picked selection of premium corporate gifts and promotional merchandise designed to leave a lasting impression.
+                Explore every category and click to view products in that category.
               </p>
             </div>
-            <Link 
-              href="/products" 
-              className="group inline-flex items-center gap-2 text-blue-600 font-semibold hover:text-blue-700 transition-colors shrink-0 whitespace-nowrap"
-            >
-              View all products
-              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
           </div>
 
-          {featuredProducts && featuredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {featuredProducts.map((product: any) => (
-                <ProductCard key={product._id} product={product} />
-              ))}
+          {categoryProductMap.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {categoryProductMap.map(({ category, products }: { category: string; products: HomeProduct[] }) => {
+                const coverImage = products[0]?.images?.[0];
+
+                return (
+                  <Link
+                    key={category}
+                    href={`/products?category=${encodeURIComponent(category)}`}
+                    className="group block bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+                  >
+                    <div className="relative aspect-[4/3] bg-gray-100">
+                      {coverImage ? (
+                        <Image
+                          src={urlFor(coverImage).width(800).height(600).url()}
+                          alt={formatCategory(category)}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
+                          No image
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-5">
+                      <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                        {formatCategory(category)}
+                      </h3>
+                      <p className="text-sm text-gray-500 mt-1">
+                        {products.length} product{products.length === 1 ? "" : "s"}
+                      </p>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           ) : (
-            <div className="text-center py-20 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-              <p className="text-gray-500">No featured products found. Add some in the Sanity Studio!</p>
+            <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-200">
+              <p className="text-gray-500">No categories found.</p>
             </div>
           )}
-
         </div>
       </section>
 
