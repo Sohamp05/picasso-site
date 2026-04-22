@@ -15,12 +15,12 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
+    <nav className="sticky top-0 z-50 w-full bg-primary border-b border-gray-light shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <img src="/logo.png" alt="Picasso Logo" className="h-20 w-auto object-contain" />
+          <Link href="/" className="flex items-center gap-3 group">
+            <img src="/logo.png" alt="Picasso Logo" className="h-24 w-auto object-contain brightness-0 invert transition-all duration-300 group-hover:brightness-100 group-hover:drop-shadow-[0_0_8px_rgba(232,178,76,0.3)] md:h-28" />
           </Link>
 
           {/* Desktop Nav */}
@@ -29,14 +29,14 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
-                className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors"
+                className="text-sm font-medium text-white hover:text-accent transition-all duration-300 hover:scale-105"
               >
                 {link.name}
               </Link>
             ))}
             <Link
               href="/contact"
-              className="bg-blue-600 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm hover:shadow-md"
+              className="bg-accent text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-accent-dark transition-all duration-300 shadow-sm hover:shadow-md"
             >
               Get a Quote
             </Link>
@@ -46,7 +46,7 @@ export default function Navbar() {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+              className="p-2 text-white hover:text-accent hover:bg-gray-light rounded-full transition-all duration-300"
               aria-label="Toggle menu"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -63,7 +63,7 @@ export default function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden bg-white border-b border-gray-100 overflow-hidden"
+            className="md:hidden bg-primary border-b border-gray-light overflow-hidden"
           >
             <div className="px-4 pt-2 pb-6 flex flex-col gap-4">
               {navLinks.map((link) => (
@@ -71,7 +71,7 @@ export default function Navbar() {
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className="text-base font-medium text-gray-800 hover:text-blue-600 transition-colors py-2"
+                  className="text-base font-medium text-white hover:text-accent transition-all duration-300 py-2 hover:pl-6"
                 >
                   {link.name}
                 </Link>
@@ -79,7 +79,7 @@ export default function Navbar() {
               <Link
                 href="/contact"
                 onClick={() => setIsOpen(false)}
-                className="bg-blue-600 text-white px-5 py-3 rounded-lg text-center font-medium hover:bg-blue-700 transition-colors shadow-sm mt-2"
+                className="bg-accent text-white px-6 py-3 rounded-xl text-center font-medium hover:bg-accent-dark transition-all duration-300 shadow-sm hover:shadow-md mt-3"
               >
                 Get a Quote
               </Link>

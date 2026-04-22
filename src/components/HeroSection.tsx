@@ -16,7 +16,7 @@ export default function HeroSection({
   videoUrl,
 }: HeroSectionProps) {
   return (
-    <div className="relative isolate overflow-hidden bg-gray-900 min-h-[85vh] flex items-center">
+    <div className="relative isolate overflow-hidden bg-primary min-h-[85vh] flex items-center">
       {/* Background Video */}
       {videoUrl ? (
         <video
@@ -30,11 +30,11 @@ export default function HeroSection({
         </video>
       ) : (
         // Fallback gradient if no video is provided
-        <div className="absolute inset-0 -z-20 bg-gradient-to-br from-gray-900 via-slate-800 to-blue-900" />
+        <div className="absolute inset-0 -z-20 bg-gradient-to-br from-primary to-gray-medium" />
       )}
 
       {/* Overlay gradient for readability */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-gray-900/80 via-gray-900/40 to-gray-900/10" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-primary/20 via-transparent to-accent/10" />
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
@@ -69,14 +69,14 @@ export default function HeroSection({
           >
             <Link
               href="/products"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 hover:scale-105 transition-all duration-300"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-8 py-3.5 text-sm font-semibold text-white shadow-md hover:shadow-lg hover:bg-accent-dark transition-all duration-300 hover:scale-105"
             >
               Explore Products
               <ArrowRight size={18} />
             </Link>
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center gap-2 rounded-full px-8 py-3.5 text-sm font-semibold text-white border border-white/30 backdrop-blur-sm hover:bg-white/10 transition-all duration-300"
+              className="inline-flex items-center justify-center gap-2 rounded-full px-8 py-3.5 text-sm font-semibold text-primary border border-gray-light backdrop-blur-sm hover:bg-gray-light hover:border-gray-medium transition-all duration-300"
             >
               Get a Free Quote
             </Link>

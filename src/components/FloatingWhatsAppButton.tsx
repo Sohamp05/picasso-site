@@ -41,8 +41,8 @@ export default function FloatingWhatsAppButton({
       className="fixed bottom-6 right-6 z-50 md:bottom-8 md:right-8"
     >
       {showOptions && (
-        <div className="absolute bottom-20 right-0 w-64 bg-white rounded-2xl shadow-2xl border border-gray-200 p-3 space-y-2">
-          <p className="text-sm font-semibold text-gray-800 px-2 pt-1">Choose a contact</p>
+        <div className="absolute bottom-20 right-0 w-72 bg-surface rounded-2xl shadow-2xl border border-gray-light p-4 space-y-2">
+          <p className="text-sm font-semibold text-primary px-3 pt-2">Choose a contact</p>
           {validContacts.map((contact) => {
             const cleanNumber = contact.phoneNumber.replace(/[^0-9]/g, "");
             const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`;
@@ -54,10 +54,10 @@ export default function FloatingWhatsAppButton({
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setShowOptions(false)}
-                className="flex items-center justify-between rounded-xl px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                className="flex items-center justify-between rounded-xl px-3 py-2 text-sm text-gray-medium hover:bg-gray-light transition-colors"
               >
                 <span>{contact.name}</span>
-                <span className="text-xs text-gray-500">{contact.phoneNumber}</span>
+                <span className="text-xs text-gray-medium">{contact.phoneNumber}</span>
               </a>
             );
           })}
@@ -67,14 +67,14 @@ export default function FloatingWhatsAppButton({
       <button
         type="button"
         onClick={() => setShowOptions((prev) => !prev)}
-        className="group flex items-center justify-center w-14 h-14 md:w-16 md:h-16 bg-[#25D366] text-white rounded-full shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+        className="group flex items-center justify-center w-14 h-14 md:w-16 md:h-16 bg-accent text-white rounded-full shadow-lg hover:shadow-xl hover:bg-accent-dark transition-all duration-300"
         aria-label="Choose WhatsApp contact"
       >
         <FaWhatsapp className="w-8 h-8 md:w-9 md:h-9 group-hover:scale-110 transition-transform duration-300" />
 
         {/* Tooltip ping animation */}
         <span className="absolute flex h-full w-full rounded-full">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-30"></span>
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-30"></span>
         </span>
       </button>
     </motion.div>
