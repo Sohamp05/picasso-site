@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FloatingWhatsAppButton from "@/components/FloatingWhatsAppButton";
 import { getSiteSettings } from "@/sanity/lib/queries";
+import { SiteSettings } from "@/types/settings";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -28,7 +29,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   // Fetch settings once in layout for the WhatsApp button
-  const settings = await getSiteSettings();
+  const settings: SiteSettings | null = await getSiteSettings();
 
   return (
     <html
@@ -46,7 +47,7 @@ export default async function RootLayout({
             { name: "Vinay Jain", phoneNumber: "+919731315677" },
             { name: "Abhishek", phoneNumber: "+919071161269" },
           ]}
-          message={settings?.whatsappMessage}
+          message={settings?.whatsappMessage ?? "Hi! I'm interested in your corporate branding solutions."}
         />
       </body>
     </html>

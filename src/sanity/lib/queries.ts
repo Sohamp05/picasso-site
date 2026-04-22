@@ -1,4 +1,5 @@
 import { client, hasSanityConfig } from "./client";
+import { SiteSettings } from "@/types/settings";
 
 async function safeFetch<T>(query: string, params: Record<string, unknown> = {}, fallback: T): Promise<T> {
   if (!hasSanityConfig || !client) {
@@ -12,8 +13,8 @@ async function safeFetch<T>(query: string, params: Record<string, unknown> = {},
   }
 }
 
-export async function getSiteSettings() {
-  return safeFetch(
+export async function getSiteSettings(): Promise<SiteSettings | null> {
+  return safeFetch<SiteSettings | null>(
     `*[_type == "siteSettings"][0]{
       heroTagline,
       heroSubtext,
