@@ -18,7 +18,7 @@ export default async function ProductsPage(props: {
   ]);
 
   // Filter out null/undefined categories just in case
-  const validCategories = (categories || []).filter(Boolean);
+  const validCategories: string[] = (categories || []).filter(Boolean);
   const initialCategory =
     searchParams.category && validCategories.includes(searchParams.category)
       ? searchParams.category

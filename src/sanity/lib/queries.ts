@@ -1,5 +1,6 @@
 import { client, hasSanityConfig } from "./client";
 import { SiteSettings } from "@/types/settings";
+import { Product } from "@/types/product";
 
 async function safeFetch<T>(query: string, params: Record<string, unknown> = {}, fallback: T): Promise<T> {
   if (!hasSanityConfig || !client) {
@@ -68,8 +69,8 @@ export async function getProductCategories() {
   );
 }
 
-export async function getProductBySlug(slug: string) {
-  return safeFetch(
+export async function getProductBySlug(slug: string): Promise<Product | null> {
+  return safeFetch<Product | null>(
     `*[_type == "product" && slug.current == $slug][0]{
       _id,
       title,

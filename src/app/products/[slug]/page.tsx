@@ -7,24 +7,24 @@ import ProductCard from "@/components/ProductCard";
 import ProductCarousel from "@/components/ProductCarousel";
 import WhatsAppContactDropdown from "@/components/WhatsAppContactDropdown";
 import type { Metadata } from "next";
+import { Product } from "@/types/product";
 
 export async function generateMetadata(
-  props: { params: Promise<{ slug: string }> }
+  { params }: { params: { slug: string } }
 ): Promise<Metadata> {
-  const params = await props.params;
-  const product = await getProductBySlug(params.slug);
+  const product: Product | null = await getProductBySlug(params.slug);
 
-  if (!product) return { title: "Product Not Found" };
+  if (!product) return { title: "Product Not Found", description: "This product does not exist" };
 
   return {
     title: `${product.title} | Picasso Corporate Branding`,
-    description: product.description?.substring(0, 160) || "Premium corporate branding product.",
+    description: product.description?.substring(0, 160) ?? "Premium corporate branding product.",
   };
 }
 
-export default async function ProductDetailPage(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
-  const product = await getProductBySlug(params.slug);
+export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await params;
+  const product: Product | null = await getProductBySlug(resolvedParams.slug);
 
   if (!product) {
     notFound();

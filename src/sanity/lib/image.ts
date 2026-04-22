@@ -1,7 +1,7 @@
 import { createImageUrlBuilder } from "@sanity/image-url";
 import { client } from "./client";
 
-const builder = createImageUrlBuilder(client);
+const builder = createImageUrlBuilder(client || undefined);
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
